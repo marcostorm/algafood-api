@@ -6,23 +6,26 @@ import com.algaworks.algafood.di.notificacao.Notificador;
 import com.algaworks.algafood.di.notificacao.NotificadorEmail;
 import com.algaworks.algafood.di.notificacao.TipoDoNotificador;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 @Component
 public class AtivacaoClienteService {
 
-    @TipoDoNotificador(NivelUrgencia.NORMAL)
+    @TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
     @Autowired
-    private List<Notificador> notificadores;
+    private Notificador notificador;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
 
     public void ativar(Cliente cliente){
         cliente.ativar();
-            for (Notificador notificador: notificadores){
-                notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
-            }
-
-
+        eventPublisher.publishEvent(new ClienteAtivadoEvent(cliente));
     }
+
 }
