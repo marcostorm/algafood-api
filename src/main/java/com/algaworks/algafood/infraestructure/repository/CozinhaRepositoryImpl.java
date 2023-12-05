@@ -22,19 +22,19 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 
     @Override
     public Cozinha buscar(Long id){
-
-        return null;
+        return manager.find(Cozinha.class, id);
     }
 
     @Override
     @Transactional
     public Cozinha salvar(Cozinha cozinha) {
-        return null;
+        return manager.merge(cozinha);
     }
 
     @Override
     @Transactional
     public void remover(Cozinha cozinha) {
-
+        cozinha = buscar(cozinha.getId());
+        manager.remove(cozinha);
     }
 }
