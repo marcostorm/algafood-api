@@ -7,8 +7,6 @@ import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +31,12 @@ public class TesteController {
         return cozinhaRepository.findByNome(nome);
     }
 
+    @GetMapping("/cozinhas/exists")
+    public boolean cozinhaExists(String nome){
+        return cozinhaRepository.existsByNome(nome);
+    }
+
+
     @GetMapping("/restaurantes/por-taxa-frete")
     public List<Restaurante> restaurantePorTaxaFrete(BigDecimal taxaInicial, BigDecimal taxaFinal) {
         return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
@@ -42,5 +46,21 @@ public class TesteController {
     public List<Restaurante> restaurantePorTaxaFrete(String nome, Long cozinhaId) {
         return restauranteRepository.findByNomeContainingAndId(nome, cozinhaId);
     }
+
+    @GetMapping("/primeiro-por-nome")
+    public Optional<Restaurante> restaurantePrimeiroPorNome(String nome){
+        return restauranteRepository.findFirstRestauranteByNomeContaining(nome);
+    }
+
+    @GetMapping("/restaurantes/top2-por-nome")
+    public Optional<Restaurante> restaurantesTop2PorNome(String nome){
+        return restauranteRepository.findFirstRestauranteByNomeContaining(nome);
+    }
+
+    @GetMapping("/restaurantes/count-por-cozinha")
+    public int restaurantesCountPorCozinha(Long cozinhaId){
+        return restauranteRepository.countByCozinhaId(cozinhaId);
+    }
+
 
 }
