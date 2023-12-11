@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
-
 @Data
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
