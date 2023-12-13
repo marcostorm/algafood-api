@@ -72,6 +72,11 @@ public class TesteController {
                 and(RestauranteSpecs.comNomeSemelhante(nome)));
     }
 
+    @GetMapping("/restaurantes/primeiro")
+    public Optional<Restaurante> restaurantePrimeiro(){
+        return restauranteRepository.buscarPrimeiro();
+    }
+
 
 
 }

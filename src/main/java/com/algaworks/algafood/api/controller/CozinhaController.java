@@ -42,6 +42,7 @@ public class CozinhaController {
         Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
 
         if (cozinha.isPresent()) {
+            cozinha.get().getRestaurantes();
             return ResponseEntity.ok(cozinha.get());
         }
 
