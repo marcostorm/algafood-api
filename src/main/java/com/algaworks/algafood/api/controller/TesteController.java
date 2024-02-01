@@ -40,15 +40,15 @@ public class TesteController {
     }
 
 
-    @GetMapping("/restaurantes/por-taxa-frete")
+    /* @GetMapping("/restaurantes/por-taxa-frete")
     public List<Restaurante> restaurantePorTaxaFrete(BigDecimal taxaInicial, BigDecimal taxaFinal) {
         return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
-    }
+    } */
 
-    @GetMapping("/restaurantes/por-nome")
+    /* @GetMapping("/restaurantes/por-nome")
     public List<Restaurante> restaurantePorTaxaFrete(String nome) {
         return restauranteRepository.findByNomeContaining(nome);
-    }
+    } */
 
     @GetMapping("/primeiro-por-nome")
     public Optional<Restaurante> restaurantePrimeiroPorNome(String nome){
