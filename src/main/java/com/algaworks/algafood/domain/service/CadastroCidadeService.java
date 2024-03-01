@@ -3,6 +3,7 @@ package com.algaworks.algafood.domain.service;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cidade;
+import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,9 +18,18 @@ public class CadastroCidadeService {
     public static final String MSG_CIDADE_EM_USO = "Cidade de código %d está sendo utilizado e não pode ser removida";
 
     @Autowired
-    CidadeRepository cidadeRepository;
+    private CidadeRepository cidadeRepository;
+
+    @Autowired
+    private CadastroEstadoService cadastroEstado;
 
     public Cidade salvar(Cidade cidade){
+        Long estadoId = cidade.getEstado().getId();
+
+        Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
+
+        cidade.setEstado(estado);
+
         return cidadeRepository.save(cidade);
     }
 
