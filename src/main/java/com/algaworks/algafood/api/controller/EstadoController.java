@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
 import com.algaworks.algafood.domain.service.CadastroEstadoService;
@@ -37,7 +38,11 @@ public class EstadoController {
 
         BeanUtils.copyProperties(estado, estadoAtual,"id");
 
-        return cadastroEstadoService.salvar(estadoAtual);
+        try{
+            return cadastroEstadoService.salvar(estadoAtual);
+        }catch (EntidadeNaoEncontradaException e){
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @DeleteMapping

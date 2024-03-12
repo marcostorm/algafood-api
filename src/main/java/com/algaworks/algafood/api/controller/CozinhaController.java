@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,22 +53,13 @@ public class CozinhaController {
 
         BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 
-        return cadastroCozinha.salvar(cozinhaAtual);
-    }
+        try {
+            return cadastroCozinha.salvar(cozinhaAtual);
+        }catch (EntidadeNaoEncontradaException e){
+            throw new NegocioException(e.getMessage());
+        }
 
-//    @DeleteMapping("/{cozinhaId}")
-//    public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
-//        try {
-//            cadastroCozinha.excluir(cozinhaId);
-//            return ResponseEntity.noContent().build();
-//
-//        } catch (EntidadeNaoEncontradaException e) {
-//            return ResponseEntity.notFound().build();
-//
-//        } catch (EntidadeEmUsoException e) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-//        }
-//    }
+    }
 
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
