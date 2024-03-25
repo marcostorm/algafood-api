@@ -34,11 +34,12 @@ public class EstadoController {
 
     @PutMapping("/{estadoId}")
     public Estado atualizar(@PathVariable Long estadoId, @RequestBody Estado estado){
-        Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(estadoId);
-
-        BeanUtils.copyProperties(estado, estadoAtual,"id");
 
         try{
+            Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(estadoId);
+
+            BeanUtils.copyProperties(estado, estadoAtual,"id");
+
             return cadastroEstadoService.salvar(estadoAtual);
         }catch (EntidadeNaoEncontradaException e){
             throw new NegocioException(e.getMessage());

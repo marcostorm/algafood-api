@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class CadastroRestauranteService {
 
-    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe um cadastro de Restaurante com o código %d!";
     public static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d está sendo utilizado e não pode ser removido";
 
     @Autowired

@@ -49,11 +49,11 @@ public class CozinhaController {
     @PutMapping("/{cozinhaId}")
     public Cozinha atualizar(@PathVariable Long cozinhaId,
                                              @RequestBody Cozinha cozinha) {
-        Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
-
-        BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-
         try {
+            Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
+
+            BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+
             return cadastroCozinha.salvar(cozinhaAtual);
         }catch (EntidadeNaoEncontradaException e){
             throw new NegocioException(e.getMessage());
