@@ -6,10 +6,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,19 +60,28 @@ public class RestauranteController {
     }
 
     private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
 
-        dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-            Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
-            field.setAccessible(true);
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
-//			System.out.println(nomePropriedade + " = " + valorPropriedade + " = " + novoValor);
+            Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
 
-            ReflectionUtils.setField(field, restauranteDestino, novoValor);
-        });
+            dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+                Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+                field.setAccessible(true);
+
+                Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+
+                ReflectionUtils.setField(field, restauranteDestino, novoValor);
+            });
+        }catch (IllegalArgumentException e){
+            Throwable rootCause = ExceptionUtils.getRootCause(e);
+            throw new HttpMessageNotWritableException(e.getMessage(), rootCause);
+        }
+
     }
 
     @DeleteMapping("/{restauranteId}")
